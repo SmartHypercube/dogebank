@@ -85,9 +85,13 @@ accountBalance :: AccountData -> Integer
 accountBalance (Debit v) = v
 accountBalance (Credit v) = v
 
-accountChange :: Integer -> AccountData -> Maybe AccountData
-accountChange d (Debit v) = if v + d >= 0 then Just $ Debit (v + d) else Nothing
-accountChange d (Credit v) = if v - d >= 0 then Just $ Credit (v - d) else Nothing
+accountChange :: Integer -> AccountData -> Either Text AccountData
+accountChange d (Debit v)
+    | v + d >= 0 = Right $ Debit (v + d)
+    | otherwise = Left "余额不足"
+accountChange d (Credit v)
+    | v - d >= 0 = Right $ Credit (v - d)
+    | otherwise = Left "还款不能超过欠款额"
 
 accountInterest :: AccountData -> Integer
 accountInterest (Debit v) = round $ fromInteger v * (0.003 :: Rational)

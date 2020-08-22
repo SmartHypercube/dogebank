@@ -94,7 +94,7 @@ change (Entity ui user) ai description delta = do
     Entity accountId account <- getBy (UniqueAccountIdPerUser ui ai)
         >>= maybe (invalidArgs ["卡不存在"]) pure
     let ti = accountNextTransactionId account
-    d <- maybe (invalidArgs ["余额不足"]) pure
+    d <- either (invalidArgs . pure) pure
         $ accountChange delta $ accountData account
     void $ insert $ Transaction
         { transactionUserId = ui
