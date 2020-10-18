@@ -7,6 +7,7 @@ module Main (main) where
 
 import RIO hiding (Handler)
 import qualified RIO.Partial as RIO'
+import qualified RIO.Text as T
 
 import Control.Monad.Logger (filterLogger, runStderrLoggingT)
 import Data.Aeson.Types (Parser, parseMaybe)
@@ -70,6 +71,7 @@ getBody parser = do
 getUser :: ReaderT SqlBackend Handler (Entity User)
 getUser = do
     token <- lookupBearerAuth >>= maybe notAuthenticated pure
+    unless (T.length token > 30) notAuthenticated
     getBy (UniqueUserToken token) >>= \case
         Just x -> pure x
         Nothing -> do
@@ -134,7 +136,7 @@ getUserR = runDB $ do
         , "flag" .= flag
         ]
   where
-    makeFlag = pure ("flag{dogebank}" :: Text)
+    makeFlag = pure ("flag{W0W.So.R1ch.Much.Smart.52f2d579}" :: Text)
     accountToJson x = object
         [ "id" .= accountIdPerUser x
         , "type" .= accountType (accountData x)

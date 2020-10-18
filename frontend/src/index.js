@@ -4,6 +4,12 @@ import ReactDOM from 'react-dom';
 import App from './app';
 
 
-const token = prompt('Token');
-
+let token = (history.state || {}).token;
+if (!token) {
+  token = new URL(location.href).searchParams.get('token');
+  if (!token) {
+    token = prompt('Token');
+  }
+  history.replaceState({token}, '', '/');
+}
 ReactDOM.render(<App token={token} />, document.getElementById('root'));

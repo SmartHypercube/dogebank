@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Axios from 'axios';
-import { Button, Card, Col, Descriptions, Form, InputNumber, Layout, Modal, Row, Select, Spin, Statistic, Table } from 'antd';
+import { Button, Card, Descriptions, Form, InputNumber, Layout, Modal, Select, Spin, Table } from 'antd';
 
 import './style.css';
 import Coin from './coin.png';
