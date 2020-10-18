@@ -7,12 +7,12 @@ session = requests.Session()
 session.headers['Authorization'] = f'Bearer {sys.argv[1]}'
 
 def get(method, **kwargs):
-    r = session.get(f'http://localhost:8080/api/{method}', params=kwargs, timeout=10)
+    r = session.get(f'http://localhost:10100/api/{method}', params=kwargs, timeout=10)
     assert r.ok
     return r.json()
 
 def post(method, **kwargs):
-    r = session.post(f'http://localhost:8080/api/{method}', json=kwargs, timeout=10)
+    r = session.post(f'http://localhost:10100/api/{method}', json=kwargs, timeout=10)
     assert r.ok
 
 post('reset')
