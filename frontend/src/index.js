@@ -8,8 +8,10 @@ let token = (history.state || {}).token;
 if (!token) {
   token = new URL(location.href).searchParams.get('token');
   if (!token) {
-    token = prompt('Token');
+    alert('请使用 Hackergame 网站上的题目链接访问');
   }
   history.replaceState({token}, '', '/');
 }
-ReactDOM.render(<App token={token} />, document.getElementById('root'));
+if (token) {
+  ReactDOM.render(<App token={token} />, document.getElementById('root'));
+}
