@@ -45,7 +45,7 @@ instance Bounded Date where
 
 newtype AccountIdPerUser = AccountIdPerUser Int64
     deriving stock (Show)
-    deriving newtype (Enum, FromJSON, PathPiece, PersistField, PersistFieldSql, ToJSON)
+    deriving newtype (Enum, Eq, FromJSON, Num, Ord, PathPiece, PersistField, PersistFieldSql, ToJSON)
 
 instance Bounded AccountIdPerUser where
     minBound = AccountIdPerUser 1
@@ -54,7 +54,7 @@ instance Bounded AccountIdPerUser where
 
 newtype TransactionIdPerAccount = TransactionIdPerAccount Int64
     deriving stock (Show)
-    deriving newtype (Enum, PersistField, PersistFieldSql, ToJSON)
+    deriving newtype (Enum, Eq, Num, Ord, PersistField, PersistFieldSql, ToJSON)
 
 instance Bounded TransactionIdPerAccount where
     minBound = TransactionIdPerAccount 1

@@ -25,6 +25,12 @@ import App.Models
 import App.Types
 
 
+accountLimit :: AccountIdPerUser
+accountLimit = 1000
+
+transactionLimit :: TransactionIdPerAccount
+transactionLimit = 100000
+
 main :: IO ()
 main = runLoggingT $ withSqlitePool "db" 1 $ \pool -> liftIO $ do
     runSqlPool (runMigration migrateAll) pool
@@ -96,6 +102,7 @@ change (Entity ui user) ai description delta = do
     Entity accountId account <- getBy (UniqueAccountIdPerUser ui ai)
         >>= maybe (invalidArgs ["卡不存在"]) pure
     let ti = accountNextTransactionId account
+    when (ti > transactionLimit) $ invalidArgs ["某张卡的交易数量已达到上限"]
     d <- either (invalidArgs . pure) pure
         $ accountChange delta $ accountData account
     void $ insert $ Transaction
@@ -181,6 +188,7 @@ postCreateR = runDB $ do
     Entity ui user <- getUser
     d <- getBody parser
     let ai = userNextAccountId user
+    when (ai > accountLimit) $ invalidArgs ["卡数量已达到上限"]
     void $ insert $ Account
         { accountUserId = ui
         , accountIdPerUser = ai
