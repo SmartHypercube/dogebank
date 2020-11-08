@@ -1,23 +1,29 @@
 #!/usr/bin/env python3
-
 import requests
 import sys
 
+TOKEN = '1:MEUCI...'
+HOST = 'http://202.38.93.111:10100'
+
+if len(TOKEN) <= 30:
+    print('请先编辑本文件，填入你的实际 token')
+
 session = requests.Session()
-session.headers['Authorization'] = f'Bearer {sys.argv[1]}'
+session.headers['Authorization'] = f'Bearer {TOKEN}'
 
 def get(method, **kwargs):
-    r = session.get(f'http://localhost:10100/api/{method}', params=kwargs, timeout=10)
+    r = session.get(f'{HOST}/api/{method}', params=kwargs, timeout=10)
     assert r.ok
     return r.json()
 
 def post(method, **kwargs):
-    r = session.post(f'http://localhost:10100/api/{method}', json=kwargs, timeout=10)
+    r = session.post(f'{HOST}/api/{method}', json=kwargs, timeout=10)
     assert r.ok
 
 post('reset')
 post('create', type='credit')
-for i in range(3, 203):
+for i in range(3, 20300):
+    print(i)
     post('create', type='debit')
     post('transfer', src=2, dst=i, amount=167)
 for date in range(1, 37):
